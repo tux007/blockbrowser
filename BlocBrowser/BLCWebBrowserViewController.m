@@ -22,6 +22,10 @@
 @property (nonatomic, strong) BLCAwesomeFloatingToolbar *awesomeToolbar;
 @property (nonatomic, assign) BOOL toolbarPositioned;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) UIButton *backButton;
+@property (nonatomic, strong) UIButton *forwardButton;
+@property (nonatomic, strong) UIButton *stopButton;
+@property (nonatomic, strong) UIButton *reloadButton;
 
 @property (nonatomic, assign) NSUInteger frameCount;
 
@@ -51,6 +55,26 @@
     self.textField.placeholder = NSLocalizedString(@"Enter website address or search term", @"Placeholder text for web browser URL field");
     self.textField.backgroundColor = [UIColor colorWithWhite:220/255.0f alpha:1];
     self.textField.delegate = self;
+    
+    self.backButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.backButton setEnabled:NO];
+    
+    self.forwardButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.forwardButton setEnabled:NO];
+    
+    self.stopButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.stopButton setEnabled:NO];
+    
+    self.reloadButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.reloadButton setEnabled:NO];
+    
+    [self.backButton setTitle:NSLocalizedString(@"Back", @"Back comnmand") forState:UIControlStateNormal];
+    
+    [self.forwardButton setTitle:NSLocalizedString(@"Forward", @"Forward comnmand") forState:UIControlStateNormal];
+    
+    [self.stopButton setTitle:NSLocalizedString(@"Stop", @"Stop comnmand") forState:UIControlStateNormal];
+    
+    [self.reloadButton setTitle:NSLocalizedString(@"Refresh", @"Reload comnmand") forState:UIControlStateNormal];
     
     self.awesomeToolbar = [[BLCAwesomeFloatingToolbar alloc] initWithFourTitles:@[kBLCWebBrowserBackString, kBLCWebBrowserForwardString, kBLCWebBrowserStopString, kBLCWebBrowserRefreshString]];
     self.awesomeToolbar.delegate = self;
@@ -170,6 +194,8 @@
     self.frameCount--;
 }
 
+
+
 - (void) updateButtonsAndTitle {
     NSString *webpageTitle = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
     
@@ -204,20 +230,7 @@
     [self updateButtonsAndTitle];
 }
 
-/*
-- (void) addButtonTargets {
-    for (UIButton *button in @[self.backButton, self.forwardButton, self.stopButton, self.reloadButton]) {
-        [button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-    }
-    
-    [self.backButton addTarget:self.webview action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
-    [self.forwardButton addTarget:self.webview action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
-    [self.stopButton addTarget:self.webview action:@selector(stopLoading) forControlEvents:UIControlEventTouchUpInside];
-    [self.reloadButton addTarget:self.webview action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self addButtonTargets];
-}
-*/
+
  
 #pragma mark - BLCAwesomeFloatingToolbarDelegate
 
@@ -257,6 +270,19 @@
 
 - (void) floatingToolbar:(BLCAwesomeFloatingToolbar *)toolbar didTryToLongPressToRotateColors:(BOOL)rotateColors {
     
+}
+
+- (void) addButtonTargets {
+    for (UIButton *button in @[self.backButton, self.forwardButton, self.stopButton, self.reloadButton]) {
+        [button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    [self.backButton addTarget:self.webView action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    [self.forwardButton addTarget:self.webView action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
+    [self.stopButton addTarget:self.webView action:@selector(stopLoading) forControlEvents:UIControlEventTouchUpInside];
+    [self.reloadButton addTarget:self.webView action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self addButtonTargets];
 }
 
 @end
